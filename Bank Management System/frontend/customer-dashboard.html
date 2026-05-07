@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - SecureBank</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-university"></i>
+                <span>SecureBank</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#transactions" class="nav-item" data-section="transactions">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transactions</span>
+            </a>
+            <a href="#transfer" class="nav-item" data-section="transfer">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Transfer</span>
+            </a>
+            <a href="#profile" class="nav-item" data-section="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a href="#settings" class="nav-item" data-section="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="sectionTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search transactions...">
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <p id="userName">Loading...</p>
+                        <span id="userEmail">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section active">
+                <!-- Welcome Card -->
+                <div class="welcome-card">
+                    <div class="welcome-content">
+                        <h2>Welcome back, <span id="welcomeName">Customer</span>!</h2>
+                        <p>Manage your account and view your financial overview</p>
+                    </div>
+                    <div class="welcome-icon">
+                        <i class="fas fa-wave-hand"></i>
+                    </div>
+                </div>
+
+                <!-- Account Overview Cards -->
+                <div class="cards-grid">
+                    <!-- Balance Card -->
+                    <div class="info-card balance-card">
+                        <div class="card-header">
+                            <h3>Total Balance</h3>
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="card-content">
+                            <p class="amount" id="totalBalance">₹0.00</p>
+                            <span class="status">Available</span>
+                        </div>
+                        <div class="card-footer">
+                            <small>Account Number: <span id="accountNum">-</span></small>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Spent Card -->
+                    <div class="info-card spent-card">
+                        <div class="card-header">
+                            <h3>Monthly Spent</h3>
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="card-content">
+                            <p class="amount" id="monthlySpent">₹0.00</p>
+                            <span class="status">This month</span>
+                        </div>
+                        <div class="card-footer">
+                            <small>Trend: <span class="trend-down">↓ 5%</span></small>
+                        </div>
+                    </div>
+
+                    <!-- Incoming Funds Card -->
+                    <div class="info-card incoming-card">
+                        <div class="card-header">
+                            <h3>Incoming Funds</h3>
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="card-content">
+                            <p class="amount" id="incomingFunds">₹0.00</p>
+                            <span class="status">Pending</span>
+                        </div>
+                        <div class="card-footer">
+                            <small>Next: <span id="nextIncoming">-</span></small>
+                        </div>
+                    </div>
+
+                    <!-- Savings Goal Card -->
+                    <div class="info-card savings-card">
+                        <div class="card-header">
+                            <h3>Savings Goal</h3>
+                            <i class="fas fa-target"></i>
+                        </div>
+                        <div class="card-content">
+                            <p class="amount">₹5,000</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small>65% complete</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="actions-grid">
+                        <button class="action-btn" id="depositBtn">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Deposit</span>
+                        </button>
+                        <button class="action-btn" id="withdrawBtn">
+                            <i class="fas fa-minus-circle"></i>
+                            <span>Withdraw</span>
+                        </button>
+                        <button class="action-btn" id="transferBtn">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transfer</span>
+                        </button>
+                        <button class="action-btn" id="paymentBtn">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Pay Bills</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="recent-section">
+                    <div class="section-header">
+                        <h3>Recent Transactions</h3>
+                        <a href="#" class="view-all">View All →</a>
+                    </div>
+                    <div class="transactions-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTransactionsList">
+                                <tr>
+                                    <td colspan="5" class="no-data">No transactions yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h4>Monthly Spending</h4>
+                        <canvas id="spendingChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h4>Transaction Types</h4>
+                        <canvas id="typesChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transactions Section -->
+            <section id="transactions-section" class="section">
+                <div class="section-header">
+                    <h2>Transaction History</h2>
+                </div>
+                
+                <div class="filter-bar">
+                    <select id="filterType">
+                        <option value="">All Types</option>
+                        <option value="DEPOSIT">Deposit</option>
+                        <option value="WITHDRAW">Withdraw</option>
+                        <option value="TRANSFER">Transfer</option>
+                    </select>
+                    <input type="date" id="filterDate" placeholder="Filter by date">
+                    <button id="filterBtn" class="btn-primary">Filter</button>
+                </div>
+
+                <div class="transactions-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allTransactionsList">
+                            <tr>
+                                <td colspan="8" class="no-data">Loading transactions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Transfer Section -->
+            <section id="transfer-section" class="section">
+                <h2>Send Money</h2>
+                <div class="form-container">
+                    <form id="transferForm">
+                        <div class="form-group">
+                            <label>Recipient Account Number</label>
+                            <input type="text" id="recipientAccount" placeholder="Enter account number" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Recipient Name</label>
+                            <input type="text" id="recipientName" placeholder="Recipient name" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Amount to Transfer</label>
+                            <div class="input-with-label">
+                                <span>₹</span>
+                                <input type="number" id="transferAmount" placeholder="0.00" min="1" step="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="transferDescription" placeholder="Transfer description..." rows="3"></textarea>
+                        </div>
+
+                        <div class="balance-info">
+                            <p>Available Balance: <strong id="availableBalance">₹0.00</strong></p>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-large">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Money
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="section">
+                <h2>Profile Information</h2>
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profileName">Loading...</h3>
+                            <p id="profileEmail">Loading...</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-details">
+                        <h4>Account Details</h4>
+                        <div class="detail-row">
+                            <span class="label">Account Number</span>
+                            <span class="value" id="profileAccountNumber">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Account Type</span>
+                            <span class="value" id="profileAccountType">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Mobile Number</span>
+                            <span class="value" id="profileMobile">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Address</span>
+                            <span class="value" id="profileAddress">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Aadhaar Number</span>
+                            <span class="value" id="profileAadhaar">XXXX XXXX XXXX</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Member Since</span>
+                            <span class="value" id="profileJoinDate">-</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button class="btn-secondary" id="editProfileBtn">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="section">
+                <h2>Settings</h2>
+                <div class="settings-container">
+                    <div class="setting-group">
+                        <h4>Security Settings</h4>
+                        <div class="setting-item">
+                            <span>Change Password</span>
+                            <button class="btn-secondary" id="changePasswordBtn">Update</button>
+                        </div>
+                        <div class="setting-item">
+                            <span>Two-Factor Authentication</span>
+                            <button class="btn-secondary">Enable</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h4>Notification Preferences</h4>
+                        <div class="setting-item">
+                            <span>Email Notifications</span>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>SMS Alerts</span>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h4>Account Settings</h4>
+                        <div class="setting-item">
+                            <span>Download Account Statement</span>
+                            <button class="btn-secondary">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Deposit Money</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="depositForm">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <div class="input-with-label">
+                        <span>₹</span>
+                        <input type="number" id="depositAmount" placeholder="0.00" min="1" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="depositMethod" required>
+                        <option value="">Select method</option>
+                        <option value="UPI">UPI</option>
+                        <option value="NETBANKING">Net Banking</option>
+                        <option value="CARD">Debit Card</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary btn-large">Deposit Now</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Withdraw Money</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <div class="input-with-label">
+                        <span>₹</span>
+                        <input type="number" id="withdrawAmount" placeholder="0.00" min="1" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Withdrawal Type</label>
+                    <select id="withdrawType" required>
+                        <option value="">Select type</option>
+                        <option value="ATM">ATM Withdrawal</option>
+                        <option value="CHECK">Check</option>
+                        <option value="BANK_TRANSFER">Bank Transfer</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary btn-large">Withdraw Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="js/customer-dashboard.js"></script>
+</body>
+</html>

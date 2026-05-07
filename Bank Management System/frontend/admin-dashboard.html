@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SecureBank</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>Admin Panel</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#customers" class="nav-item" data-section="customers">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="#transactions" class="nav-item" data-section="transactions">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Transactions</span>
+            </a>
+            <a href="#analytics" class="nav-item" data-section="analytics">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="#approvals" class="nav-item" data-section="approvals">
+                <i class="fas fa-check-circle"></i>
+                <span>Approvals</span>
+            </a>
+            <a href="#settings" class="nav-item" data-section="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="sectionTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchBox" placeholder="Search customers...">
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="user-info">
+                        <p id="adminName">Admin</p>
+                        <span>Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section active">
+                <!-- Key Stats -->
+                <div class="cards-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Users</h3>
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-number" id="totalUsers">0</p>
+                            <span class="stat-change">↑ 5% from last week</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Transactions</h3>
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-number" id="totalTransactions">0</p>
+                            <span class="stat-change">↑ 12% from last week</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Balance</h3>
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-number" id="totalBankBalance">₹0</p>
+                            <span class="stat-change">Bank total</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Pending Approvals</h3>
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-number" id="pendingApprovals">0</p>
+                            <span class="stat-change">Awaiting review</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h4>Daily Transactions</h4>
+                        <canvas id="dailyTransactionsChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h4>User Growth</h4>
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="recent-section">
+                    <div class="section-header">
+                        <h3>Recent Activities</h3>
+                    </div>
+                    <div class="activities-list" id="activitiesList">
+                        <p class="no-data">Loading activities...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Customers Section -->
+            <section id="customers-section" class="section">
+                <div class="section-header">
+                    <h2>Customer Management</h2>
+                    <button class="btn-primary" id="addCustomerBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Customer
+                    </button>
+                </div>
+
+                <div class="filter-bar">
+                    <input type="text" id="customerSearch" placeholder="Search by name or email...">
+                    <select id="accountTypeFilter">
+                        <option value="">All Account Types</option>
+                        <option value="SAVINGS">Savings</option>
+                        <option value="CURRENT">Current</option>
+                        <option value="STUDENT">Student</option>
+                    </select>
+                    <button id="filterCustomersBtn" class="btn-primary">Filter</button>
+                </div>
+
+                <div class="transactions-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Account Type</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersList">
+                            <tr>
+                                <td colspan="9" class="no-data">Loading customers...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Transactions Section -->
+            <section id="transactions-section" class="section">
+                <div class="section-header">
+                    <h2>Transaction Management</h2>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="transactionTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="DEPOSIT">Deposit</option>
+                        <option value="WITHDRAW">Withdraw</option>
+                        <option value="TRANSFER">Transfer</option>
+                    </select>
+                    <input type="date" id="transactionDateFilter">
+                    <button id="filterTransactionsBtn" class="btn-primary">Filter</button>
+                </div>
+
+                <div class="transactions-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Account Number</th>
+                                <th>Customer Name</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Balance After</th>
+                                <th>Status</th>
+                                <th>Date & Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsList">
+                            <tr>
+                                <td colspan="9" class="no-data">Loading transactions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics-section" class="section">
+                <h2>Banking Analytics</h2>
+
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h4>Deposit vs Withdrawal Trends</h4>
+                        <canvas id="depositWithdrawalChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h4>Transaction Types Distribution</h4>
+                        <canvas id="transactionTypesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h4>Monthly Revenue</h4>
+                        <canvas id="monthlyRevenueChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h4>Top Customers by Balance</h4>
+                        <canvas id="topCustomersChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Approvals Section -->
+            <section id="approvals-section" class="section">
+                <div class="section-header">
+                    <h2>Account Approvals</h2>
+                </div>
+
+                <div class="filter-bar">
+                    <select id="approvalStatusFilter">
+                        <option value="">All Status</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="REJECTED">Rejected</option>
+                    </select>
+                    <button id="filterApprovalsBtn" class="btn-primary">Filter</button>
+                </div>
+
+                <div class="transactions-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer Name</th>
+                                <th>Email</th>
+                                <th>Account Type</th>
+                                <th>Aadhaar</th>
+                                <th>PAN</th>
+                                <th>Status</th>
+                                <th>Applied On</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approvalsList">
+                            <tr>
+                                <td colspan="8" class="no-data">Loading approval requests...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="section">
+                <h2>Admin Settings</h2>
+
+                <div class="settings-container">
+                    <div class="setting-group">
+                        <h4>System Configuration</h4>
+                        <div class="setting-item">
+                            <span>Minimum Withdrawal Amount</span>
+                            <input type="number" value="100" class="setting-input">
+                        </div>
+                        <div class="setting-item">
+                            <span>Maximum Transfer Limit</span>
+                            <input type="number" value="100000" class="setting-input">
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h4>Security Settings</h4>
+                        <div class="setting-item">
+                            <span>Enable 2FA for Customers</span>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Auto-logout Timeout (minutes)</span>
+                            <input type="number" value="30" class="setting-input">
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <button class="btn-primary" id="saveSettingsBtn">Save Settings</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Action Modal -->
+    <div id="actionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="actionModalTitle">Action</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="actionModalBody">
+                <!-- Content will be dynamically added -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
